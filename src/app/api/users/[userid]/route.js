@@ -1,7 +1,7 @@
 import { User } from "../../../../models/user.js";
 import { connectDb } from "../../../../helper/db.js";
 import { NextResponse } from "next/server";
-
+import bcrypt from "bcryptjs";
 connectDb();
 
 //delete user
@@ -52,15 +52,22 @@ export async function GET(request, { params }) {
 
 // edit user details
 export async function PUT(request, { params }) {
-  const { userid } = await params;
+  const { userid } = params;
   const { name, password, about, profileURL } = await request.json();
 
   try {
-    const modifiedUser = await User.findByIdAndUpdate(
-      userid,
-      { name, password, about, profileURL },
-      { new: true }
-    ).select("-password");
+    let updateData = { name, about, profileURL };
+
+    // If password is provided, hash it before updating
+    if (password && password.trim() !== "") {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      updateData.password = hashedPassword;
+    }
+
+    const modifiedUser = await User.findByIdAndUpdate(userid, updateData, {
+      new: true,
+    }).select("-password");
 
     return NextResponse.json(
       {
@@ -73,7 +80,7 @@ export async function PUT(request, { params }) {
     return NextResponse.json(
       {
         success: false,
-        msg: err.errmsg,
+        msg: err.message || "Server error",
       },
       { status: 500 }
     );

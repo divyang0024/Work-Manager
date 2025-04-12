@@ -62,7 +62,7 @@ function CustomNavbar() {
           {context.user && (
             <>
               <li>
-                <Link href="#!">{context.user.user.name}</Link>
+                <Link href="/profile/user">{context.user.user.name}</Link>
               </li>
               <li>
                 <Link href="#!" onClick={doLogout}>
