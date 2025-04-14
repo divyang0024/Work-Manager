@@ -73,7 +73,7 @@ const ActionSection = () => {
             Start managing your tasks efficiently with our intuitive app,
             designed to boost your productivity.
           </p>
-          <Link href="/sign-up">
+          <Link href="/add-task">
             <button className="bg-white text-blue-500 py-3 sm:py-3.5 px-6 sm:px-8 rounded-md hover:bg-blue-100 hover:scale-105 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-all duration-300 animate-pulse-glow cursor-pointer text-base sm:text-lg">
               Get Started
             </button>

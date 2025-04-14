@@ -14,9 +14,11 @@ export default function SignUp() {
     profileURL:
       "https://imgs.search.brave.com/YymyHN5hCzKav184Ax8WJsqhYr49A4VNH6EUDLizvI0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA5LzE3LzEyLzIz/LzM2MF9GXzkxNzEy/MjM2N19rU3BkcFJK/NUhjbW4wczRXTWRK/YlNacGw3TlJ6d3Vw/VS5qcGc",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const doSignup = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const result = await signUp(data);
       toast.success("Sign up successful");
@@ -30,6 +32,8 @@ export default function SignUp() {
       });
     } catch (error) {
       toast.error("Sign up failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,6 +81,34 @@ export default function SignUp() {
             transform: translateY(-3px);
           }
         }
+        @keyframes spinGlow {
+          0% {
+            transform: rotate(0deg) scale(1);
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+          }
+          50% {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+          }
+          100% {
+            transform: rotate(360deg) scale(1);
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+          }
+        }
+        @keyframes pulseDot {
+          0% {
+            opacity: 0.3;
+            transform: scale(0.8);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.2);
+          }
+          100% {
+            opacity: 0.3;
+            transform: scale(0.8);
+          }
+        }
         .animate-slide-in {
           animation: slideIn 0.6s ease-out forwards;
         }
@@ -85,6 +117,39 @@ export default function SignUp() {
         }
         .animate-bounce:hover {
           animation: bounce 0.5s ease-in-out;
+        }
+        .loader {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          position: relative;
+          width: 60px;
+          height: 60px;
+          margin: 0 auto;
+        }
+        .loader-dot {
+          width: 12px;
+          height: 12px;
+          background: linear-gradient(45deg, #3b82f6, #60a5fa);
+          border-radius: 50%;
+          animation: pulseDot 1.2s ease-in-out infinite;
+        }
+        .loader-dot:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .loader-dot:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        .loader::before {
+          content: "";
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          border: 3px solid transparent;
+          border-top-color: #3b82f6;
+          border-radius: 50%;
+          animation: spinGlow 1.5s linear infinite;
         }
       `}</style>
       <div className="min-h-screen flex items-center justify-center bg-black py-6 sm:py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -136,6 +201,7 @@ export default function SignUp() {
                   onChange={(e) => setData({ ...data, name: e.target.value })}
                   value={data.name}
                   required
+                  disabled={isLoading}
                 />
                 <svg
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50 group-hover:text-white group-hover:scale-110 transition-all duration-300"
@@ -168,6 +234,7 @@ export default function SignUp() {
                   onChange={(e) => setData({ ...data, email: e.target.value })}
                   value={data.email}
                   required
+                  disabled={isLoading}
                 />
                 <svg
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50 group-hover:text-white group-hover:scale-110 transition-all duration-300"
@@ -203,6 +270,7 @@ export default function SignUp() {
                   }
                   value={data.password}
                   required
+                  disabled={isLoading}
                 />
                 <svg
                   className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50 group-hover:text-white group-hover:scale-110 transition-all duration-300"
@@ -233,8 +301,23 @@ export default function SignUp() {
                 rows={5}
                 onChange={(e) => setData({ ...data, about: e.target.value })}
                 value={data.about}
+                disabled={isLoading}
               />
             </div>
+
+            {/* Loader */}
+            {isLoading && (
+              <div
+                className="mb-6 animate-slide-in"
+                style={{ animationDelay: "600ms" }}
+              >
+                <div className="loader">
+                  <div className="loader-dot"></div>
+                  <div className="loader-dot"></div>
+                  <div className="loader-dot"></div>
+                </div>
+              </div>
+            )}
 
             {/* Buttons */}
             <div
@@ -243,14 +326,16 @@ export default function SignUp() {
             >
               <button
                 type="submit"
-                className="bg-blue-500 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-md hover:bg-blue-600 hover:scale-105 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-all duration-300 animate-pulse-glow cursor-pointer"
+                className="bg-blue-500 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-md hover:bg-blue-600 hover:scale-105 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-all duration-300 animate-pulse-glow cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLoading}
               >
-                Sign Up
+                {isLoading ? "Signing up..." : "Sign Up"}
               </button>
               <button
                 type="button"
                 onClick={clearForm}
-                className="bg-red-500 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-md hover:bg-red-600 hover:scale-105 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-all duration-300 animate-pulse-glow cursor-pointer"
+                className="bg-red-500 text-white py-2.5 sm:py-3 px-5 sm:px-6 rounded-md hover:bg-red-600 hover:scale-105 focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 transition-all duration-300 animate-pulse-glow cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isLoading}
               >
                 Clear
               </button>
