@@ -9,7 +9,7 @@ export const metadata = {
 function page() {
   return (
     <div>
-      <LogIn />;
+      <LogIn />
       <Footer />
     </div>
   );

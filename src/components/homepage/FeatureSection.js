@@ -1,42 +1,93 @@
+"use client";
 import React from "react";
 import { FiCheckCircle, FiList, FiCalendar } from "react-icons/fi";
 
 const FeatureSection = () => {
   return (
-    <div className="bg-blue-500 text-white py-12">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-semibold text-center mb-8">
-          Features of Task Manager
-        </h2>
-        <div className="flex flex-wrap justify-center -mx-4">
-          <FeatureCard
-            icon={<FiCheckCircle className="text-white w-8 h-8" />}
-            title="Easy Task Management"
-            description="Organize your tasks effortlessly using our intuitive task management system."
-          />
-          <FeatureCard
-            icon={<FiList className="text-white w-8 h-8" />}
-            title="Task Categories"
-            description="Categorize your tasks into different categories for better organization."
-          />
-          <FeatureCard
-            icon={<FiCalendar className="text-white w-8 h-8" />}
-            title="Due Date Reminders"
-            description="Set due date reminders to stay on top of your tasks and deadlines."
-          />
+    <>
+      <style jsx>{`
+        @keyframes slideIn {
+          0% {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes pulseGlow {
+          0% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+          }
+          50% {
+            box-shadow: 0 0 8px 3px rgba(255, 255, 255, 0.6);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+          }
+        }
+        .animate-slide-in {
+          animation: slideIn 0.6s ease-out forwards;
+        }
+        .animate-pulse-glow:hover {
+          animation: pulseGlow 1.2s ease-in-out infinite;
+        }
+      `}</style>
+      <div className="bg-black py-12 sm:py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Background Effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(59,130,246,0.15),transparent_60%)] opacity-50 animate-pulse"></div>
+
+        <div className="max-w-5xl mx-auto relative z-10">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-white mb-10 sm:mb-12 animate-slide-in">
+            Features of Task Manager
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+            <FeatureCard
+              icon={
+                <FiCheckCircle className="w-10 h-10 text-white group-hover:scale-110 transition-transform duration-300" />
+              }
+              title="Easy Task Management"
+              description="Organize your tasks effortlessly with our intuitive system, designed for seamless productivity."
+              delay="100ms"
+            />
+            <FeatureCard
+              icon={
+                <FiList className="w-10 h-10 text-white group-hover:scale-110 transition-transform duration-300" />
+              }
+              title="Task Categories"
+              description="Group your tasks into categories for better organization and clarity."
+              delay="200ms"
+            />
+            <FeatureCard
+              icon={
+                <FiCalendar className="w-10 h-10 text-white group-hover:scale-110 transition-transform duration-300" />
+              }
+              title="Due Date Reminders"
+              description="Set reminders to stay on top of deadlines and never miss a task."
+              delay="300ms"
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-const FeatureCard = ({ icon, title, description }) => {
+const FeatureCard = ({ icon, title, description, delay }) => {
   return (
-    <div className="w-full md:w-1/3 px-4 mb-8">
-      <div className="bg-blue-700 rounded-lg p-6 flex items-center justify-center flex-col h-full">
+    <div
+      className="w-full animate-slide-in group"
+      style={{ animationDelay: delay }}
+    >
+      <div className="bg-blue-600 rounded-xl p-6 sm:p-8 flex flex-col items-center justify-between h-full border border-blue-500 hover:bg-blue-700 hover:scale-105 transition-all duration-300 animate-pulse-glow cursor-pointer">
         <div className="mb-4">{icon}</div>
-        <h3 className="text-xl font-semibold mb-2">{title}</h3>
-        <p className="text-white text-center">{description}</p>
+        <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 text-center">
+          {title}
+        </h3>
+        <p className="text-sm sm:text-base text-white/80 text-center">
+          {description}
+        </p>
       </div>
     </div>
   );
